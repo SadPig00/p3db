@@ -1,0 +1,20 @@
+package com.suwon.ezen.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.suwon.ezen.vo.WeatherVO;
+
+@Controller
+@RequestMapping("/sensor")
+public class WeatherController {
+	@PostMapping("/")
+	public void getWeather(@RequestBody WeatherVO vo, Model model) {
+		System.out.println(vo);
+		model.addAttribute("temp", vo.getTemp());
+		model.addAttribute("humi", vo.getHumi());
+	}
+}

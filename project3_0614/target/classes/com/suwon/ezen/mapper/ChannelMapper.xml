@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.suwon.ezen.mapper.ChannelMapper">
+	<select id="getChannelList" resultType="String">
+		select column_name from INFORMATION_SCHEMA.COLUMNS where table_name='tiltData' and column_name like '%tilt%'
+	</select>
+	<select id="getDataByChannel" resultType="String">
+		select  truncate(avg(${channel}),2),date_format(updatetime,'%H') from 
+		tiltData where updatetime between #{chooseDate1} and #{chooseDate2} and temp is not null
+		group by date_format(updatetime,'%H');
+	</select>
+	<select id="getDateByChannel" resultType="String">
+		select date_format(updatetime,'%H') from tiltData where updatetime between #{chooseDate1} and #{chooseDate2}and temp is not null
+		group by date_format(updatetime,'%H');
+	</select>
+	
+	<select id="getMinDate" resultType="date">
+		select min(updatetime) from tiltData
+	</select>
+	<select id="getAvgTemp" resultType="String">
+		select  truncate(avg(temp),2) from 
+		tiltData where updatetime between #{chooseDate1} and #{chooseDate2} and temp is not null
+		group by date_format(updatetime,'%D') limit 1;
+	</select>
+	
+	<select id="getAvgBatt" resultType="String">
+		select  truncate(avg(batt),2) from 
+		tiltData where updatetime between #{chooseDate1} and #{chooseDate2} and batt is not null
+		group by date_format(updatetime,'%D') limit 1;
+	</select>
+	<select id="getTiltMaxMin" resultType="hashmap">
+		select truncate(max(result.tilt),2) as maxtilt, truncate(min(result.tilt),2) as mintilt from (select avg(${channel}) as tilt from 
+		tiltData where updatetime between #{chooseDate1} and #{chooseDate2} and batt is not null
+		group by date_format(updatetime,'%H')) as result ;
+	</select>
+	<select id="getAvgtilt" resultType="String">
+		select  truncate(avg(${channel}),2),date_format(updatetime,'%D') from 
+		tiltData where updatetime between #{chooseDate1} and #{chooseDate2} and temp is not null
+		group by date_format(updatetime,'%D') limit 1;
+	</select>
+	<select id="getLatLng" resultType="hashmap">
+		select lat,lng from latlng where tilt=#{tilt}
+	</select>
+	<select id="getLatLngAll" resultType="com.suwon.ezen.vo.LatLngVO">
+		select * from latlng
+	</select>
+</mapper>

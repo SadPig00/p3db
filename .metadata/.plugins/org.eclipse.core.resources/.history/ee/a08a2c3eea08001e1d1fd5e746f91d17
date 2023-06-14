@@ -1,0 +1,5 @@
+package com.suwon.ezen.controller;
+
+public class WeatherController {
+
+}

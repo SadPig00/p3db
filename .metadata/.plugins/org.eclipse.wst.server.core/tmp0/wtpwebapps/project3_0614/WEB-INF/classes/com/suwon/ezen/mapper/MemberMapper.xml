@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.suwon.ezen.mapper.MemberMapper">
+
+	<insert id="insertMember" parameterType="com.suwon.ezen.vo.MemberVO">
+		insert into p3member (pno, name, email, phone, password, logindate)
+        values (null,#{name},#{email},#{phone},#{password},default)
+	</insert>
+	
+	<select id="countMembersByDate" resultType="map">
+	    select date_format(logindate, '%Y-%m-%d') as formatted_date, count(*) as count
+	    from p3member
+	    where month(logindate) = #{selectedMonth}
+	    group by date_format(logindate, '%Y-%m-%d')
+	    order by date_format(logindate, '%Y-%m-%d')
+	</select>
+		
+</mapper>
